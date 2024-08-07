@@ -1,0 +1,6 @@
+.vs
+.vscode
+.DS_Store
+src/bin
+src/obj
+src/Properties
