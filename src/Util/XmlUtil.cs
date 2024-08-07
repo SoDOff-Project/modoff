@@ -25,6 +25,14 @@ namespace modoff.Util {
             }
         }
 
+        public static string SerializeXmlGeneric(object xmlObject) {
+            var serializer = new XmlSerializer(xmlObject.GetType());
+            using (var writer = new Utf8StringWriter()) {
+                serializer.Serialize(writer, xmlObject);
+                return writer.ToString();
+            }
+        }
+
         public static string ReadResourceXmlString(string name) {
             string result = "";
             var assembly = Assembly.GetExecutingAssembly();
