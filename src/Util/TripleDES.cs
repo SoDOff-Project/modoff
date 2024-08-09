@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace sodoff.Util {
+namespace modoff.Util {
 
     public static class TripleDES {
         public static void NotEmpty(string str, string paramName) {
