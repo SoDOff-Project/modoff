@@ -4,3 +4,5 @@
 src/bin
 src/obj
 src/Properties
+libs/*
+!libs/.keep
