@@ -24,5 +24,17 @@ namespace modoff
 
             RuntimeStore.Init();
         }
+
+        private void OnGUI() {
+            GUIStyle style = new GUIStyle {
+                fontSize = 18,
+                normal = { textColor = Color.white }
+            };
+            int pos = 10;
+            foreach (var item in ModoffLogger.messages) {
+                GUI.Label(new Rect(10, pos, 5000, 30), item, style);
+                pos += 35;
+            }
+        }
     }
 }
