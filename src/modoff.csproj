@@ -11,6 +11,70 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\achievementsids.xml" />
+    <None Remove="Resources\achievementstasks.xml" />
+    <None Remove="Resources\achievementtaskinfo.xml" />
+    <None Remove="Resources\allranks.xml" />
+    <None Remove="Resources\allranks_mb.xml" />
+    <None Remove="Resources\allranks_wojs.xml" />
+    <None Remove="Resources\content_arcade.xml" />
+    <None Remove="Resources\content_blastermovie.xml" />
+    <None Remove="Resources\content_jukebox.xml" />
+    <None Remove="Resources\content_learning.xml" />
+    <None Remove="Resources\content_movie.xml" />
+    <None Remove="Resources\defaulthouse.xml" />
+    <None Remove="Resources\defaultmissionlist.xml" />
+    <None Remove="Resources\defaultmissionlistmam.xml" />
+    <None Remove="Resources\defaultmissionlistv1.xml" />
+    <None Remove="Resources\defaultmissionlist_wojs.xml" />
+    <None Remove="Resources\displaynames.xml" />
+    <None Remove="Resources\dtrewards.xml" />
+    <None Remove="Resources\items.xml" />
+    <None Remove="Resources\missions.xml" />
+    <None Remove="Resources\missions_wojs.xml" />
+    <None Remove="Resources\missions_wojs_jr.xml" />
+    <None Remove="Resources\mmo.xml" />
+    <None Remove="Resources\profiletags.xml" />
+    <None Remove="Resources\questiondata.xml" />
+    <None Remove="Resources\rankattrib.xml" />
+    <None Remove="Resources\rankattrib_mb.xml" />
+    <None Remove="Resources\rewardmultiplier.xml" />
+    <None Remove="Resources\store.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\achievementsids.xml" />
+    <EmbeddedResource Include="Resources\achievementstasks.xml" />
+    <EmbeddedResource Include="Resources\achievementtaskinfo.xml" />
+    <EmbeddedResource Include="Resources\allranks.xml" />
+    <EmbeddedResource Include="Resources\allranks_mb.xml" />
+    <EmbeddedResource Include="Resources\allranks_wojs.xml" />
+    <EmbeddedResource Include="Resources\content_arcade.xml" />
+    <EmbeddedResource Include="Resources\content_blastermovie.xml" />
+    <EmbeddedResource Include="Resources\content_jukebox.xml" />
+    <EmbeddedResource Include="Resources\content_learning.xml" />
+    <EmbeddedResource Include="Resources\content_movie.xml" />
+    <EmbeddedResource Include="Resources\defaulthouse.xml" />
+    <EmbeddedResource Include="Resources\defaultmissionlist.xml" />
+    <EmbeddedResource Include="Resources\defaultmissionlistmam.xml" />
+    <EmbeddedResource Include="Resources\defaultmissionlistv1.xml" />
+    <EmbeddedResource Include="Resources\defaultmissionlist_wojs.xml" />
+    <EmbeddedResource Include="Resources\displaynames.xml" />
+    <EmbeddedResource Include="Resources\dtrewards.xml" />
+    <EmbeddedResource Include="Resources\items.xml" />
+    <EmbeddedResource Include="Resources\missions.xml" />
+    <EmbeddedResource Include="Resources\missions_wojs.xml" />
+    <EmbeddedResource Include="Resources\missions_wojs_jr.xml" />
+    <EmbeddedResource Include="Resources\mmo.xml" />
+    <EmbeddedResource Include="Resources\profiletags.xml" />
+    <EmbeddedResource Include="Resources\questiondata.xml" />
+    <EmbeddedResource Include="Resources\rankattrib.xml" />
+    <EmbeddedResource Include="Resources\rankattrib_mb.xml" />
+    <EmbeddedResource Include="Resources\rewardmultiplier.xml" />
+    <EmbeddedResource Include="Resources\store.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
     <PackageReference Include="BepInEx.Core" Version="5.*" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />

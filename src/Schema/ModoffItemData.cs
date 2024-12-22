@@ -4,9 +4,6 @@ using System.Xml.Serialization;
 namespace modoff.Schema {
     [XmlRoot(ElementName = "I", Namespace = "", IsNullable = true)]
     public class ModoffItemData : ItemData {
-        [XmlElement(ElementName = "r")]
-        public new ModoffItemDataRelationship[] Relationship;
-
         [XmlIgnore]
         public float NormalDiscoutModifier;
 

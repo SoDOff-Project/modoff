@@ -54,19 +54,19 @@ namespace modoff.Services {
             var boxRewards = boxItem.Relationship.Where(e => e.Type == "Prize").ToArray();
             int totalWeight = boxRewards.Sum(e => e.Weight);
             if (totalWeight == 0) {
-                return boxRewards[random.Next(0, boxRewards.Length)];
+                return (ModoffItemDataRelationship)boxRewards[random.Next(0, boxRewards.Length)];
             }
             int cnt = 0;
             int win = random.Next(0, totalWeight);
             foreach (var reward in boxRewards) {
                 cnt += reward.Weight;
                 if (cnt > win && CheckItemGender(items[reward.ItemId], gender)) {
-                    return reward;
+                    return (ModoffItemDataRelationship)reward;
                 }
             }
             foreach (var reward in boxRewards) { // do again in case high `win` value and CheckItemGender fail
                 if (CheckItemGender(items[reward.ItemId], gender)) {
-                    return reward;
+                    return (ModoffItemDataRelationship)reward;
                 }
             }
             return null;
