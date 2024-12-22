@@ -5,15 +5,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using modoff.Runtime;
+using modoff.Services;
 
 namespace modoff.Controllers {
 
     public class RegistrationController : Controller {
 
         private readonly DBContext ctx;
+        private MissionService missionService;
+        private RoomService roomService;
+        private KeyValueService keyValueService;
 
-        public RegistrationController(DBContext ctx) {
+        public RegistrationController(DBContext ctx, MissionService missionService, RoomService roomService, KeyValueService keyValueService) {
             this.ctx = ctx;
+            this.missionService = missionService;
+            this.roomService = roomService;
+            this.keyValueService = keyValueService;
         }
 
         [Route("v3/RegistrationWebService.asmx/DeleteProfile")]
@@ -134,7 +141,7 @@ namespace modoff.Controllers {
                 BirthDate = data.BirthDate
             };
 
-            //missionService.SetUpMissions(v, gameVersion);
+            missionService.SetUpMissions(v, gameVersion);
 
             if (data.Gender == "Boy") v.Gender = Gender.Male;
             else if (data.Gender == "Girl") v.Gender = Gender.Female;
@@ -142,11 +149,11 @@ namespace modoff.Controllers {
             ctx.Vikings.Add(v);
             ctx.SaveChanges();
 
-            /*if (gameVersion >= ClientVersion.MaM && gameVersion < 0xa2a09a0a) {
+            if (gameVersion >= ClientVersion.MaM && gameVersion < 0xa2a09a0a) {
                 keyValueService.SetPairData(null, v, null, 2017, new PairData {
                     Pairs = new Pair[]{
                     new Pair {
-                        // avoid show change viking name dialog
+                        // avoid showing change viking name dialog
                         PairKey = "AvatarNameCustomizationDone",
                         PairValue = "1"
                     },
@@ -154,7 +161,7 @@ namespace modoff.Controllers {
                 });
             }
 
-            roomService.CreateRoom(v, "MyRoomINT");*/
+            roomService.CreateRoom(v, "MyRoomINT");
 
             return v;
         }
