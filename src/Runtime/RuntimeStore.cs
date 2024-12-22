@@ -39,10 +39,11 @@ namespace modoff.Runtime {
             neighborhoodService = new NeighborhoodService(ctx);
             profileService = new ProfileService(ctx);
             roomService = new RoomService(ctx, itemService, achievementService);
-            //storeService = new StoreService(itemService);
+            storeService = new StoreService(itemService);
 
             var controllers = new List<Controller> {
                 new AuthenticationController(ctx),
+                new MembershipController(ctx),
                 new RegistrationController(ctx, missionService, roomService, keyValueService)
             };
 
