@@ -26,9 +26,9 @@ namespace modoff.Controllers {
         }
 
         [Route("MembershipWebService.asmx/GetChildList")] // used by old SoD (e.g. 2.9)
-        public IActionResult GetChildList(Guid apiToken) {
-            User user = ctx.Sessions.FirstOrDefault(x => x.ApiToken == apiToken).User;
-            if (user == null || user.Vikings.Count <= 0)
+        [VikingSession(Mode = VikingSession.Modes.USER, UseLock = false)]
+        public IActionResult GetChildList(User user) {
+            if (user.Vikings.Count <= 0)
                 return Ok(""); // FIXME
 
             ChildList profiles = new ChildList();

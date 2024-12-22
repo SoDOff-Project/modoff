@@ -40,17 +40,15 @@ namespace modoff.Controllers {
         }
 
         [Route("ProfileWebService.asmx/GetUserProfile")]
-        public IActionResult GetUserProfile(Guid apiToken, string apiKey) {
-            Viking viking = ctx.Sessions.FirstOrDefault(x => x.ApiToken == apiToken).Viking;
-            if (viking is null)
-                return Ok("");
+        [VikingSession(UseLock = false)]
+        public IActionResult GetUserProfile(Viking viking, string apiKey) {
             return Ok(GetProfileDataFromViking(viking, apiKey));
         }
 
         [Route("ProfileWebService.asmx/GetDetailedChildList")]
-        public IActionResult GetDetailedChildList(Guid parentApiToken, string apiKey) {
-            User user = ctx.Sessions.FirstOrDefault(x => x.ApiToken == parentApiToken)?.User;
-            if (user is null || user.Vikings == null || user.Vikings.Count <= 0)
+        [VikingSession(Mode = VikingSession.Modes.USER, ApiToken = "parentApiToken", UseLock = false)]
+        public IActionResult GetDetailedChildList(User user, string apiKey) {
+            if (user.Vikings.Count <= 0)
                 return Ok(""); // FIXME
 
             UserProfileData[] profiles = user.Vikings.Select(v => GetProfileDataFromViking(v, apiKey)).ToArray();
@@ -66,8 +64,8 @@ namespace modoff.Controllers {
         }
 
         [Route("ProfileWebService.asmx/SetUserProfileAnswers")]
-        public IActionResult SetUserProfileAnswers(Guid apiToken, int profileAnswerIDs) {
-            Viking viking = ctx.Sessions.FirstOrDefault(x => x.ApiToken == apiToken).Viking;
+        [VikingSession]
+        public IActionResult SetUserProfileAnswers(Viking viking, int profileAnswerIDs) {
             if (viking is null)
                 return Ok("");
             ProfileQuestion questionFromaId = profileService.GetQuestionFromAnswerId(profileAnswerIDs);

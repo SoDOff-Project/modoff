@@ -9,7 +9,7 @@ namespace modoff.Attributes {
         public DecryptRequest(string field) : base(field) {}
 
         public override string Execute(string input) {
-            return TripleDES.DecryptUnicode(input, key);
+            return TripleDES.DecryptUnicode(input.ToString(), key);
         }
     }
 }

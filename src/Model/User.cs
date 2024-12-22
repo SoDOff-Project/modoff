@@ -16,8 +16,8 @@ namespace modoff.Model {
         [Required]
         public string Password { get; set; } = null;
 
-        public virtual ICollection<Session> Sessions { get; set; } = null;
-        public virtual ICollection<Viking> Vikings { get; set; } = null;
-        public virtual ICollection<PairData> PairData { get; set; } = null;
+        public virtual ICollection<Session> Sessions { get; set; } = new List<Session>();
+        public virtual ICollection<Viking> Vikings { get; set; } = new List<Viking>();
+        public virtual ICollection<PairData> PairData { get; set; } = new List<PairData>();
     }
 }

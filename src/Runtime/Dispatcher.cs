@@ -3,6 +3,8 @@ using modoff.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using modoff.Model;
+using static System.Collections.Specialized.BitVector32;
 
 namespace modoff.Runtime {
     public class Dispatcher {
@@ -34,10 +36,20 @@ namespace modoff.Runtime {
             var (method, controller) = routeInfo;
             var parameters = method.GetParameters();
             var args = new object[parameters.Length];
+            var session = method.GetCustomAttribute<VikingSession>();
 
             for (int i = 0; i < parameters.Length; i++) {
                 var param = parameters[i];
-                if (request.TryGetValue(param.Name, out string value)) {
+                if (session != null && (param.Name == "viking" || param.Name == "user")) {
+                    if (session.Execute(request, out Viking v, out User u)) {
+                        if (v != null && param.Name == "viking")
+                            args[i] = v;
+                        if (u != null && param.Name == "user")
+                            args[i] = u;
+                    } else {
+                        return ""; // FIXME
+                    }
+                } else if (request.TryGetValue(param.Name, out string value)) {
                     foreach (var preAction in method.GetCustomAttributes<PreActionAttribute>()) {
                         if (param.Name == preAction.Field)
                             value = preAction.Execute(value);
@@ -46,8 +58,7 @@ namespace modoff.Runtime {
                     if (param.ParameterType == typeof(Guid))
                         args[i] = Guid.Parse(value.ToString());
                     else
-                    args[i] = Convert.ChangeType(value, param.ParameterType);
-
+                        args[i] = Convert.ChangeType(value, param.ParameterType);
                 } else {
                     ModoffLogger.Log($"Missing parameter: {param.Name}");
                     throw new Exception($"Missing parameter: {param.Name}");
