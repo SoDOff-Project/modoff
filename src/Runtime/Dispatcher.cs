@@ -29,6 +29,8 @@ namespace modoff.Runtime {
                 throw new Exception("Route not found");
             }
 
+            ModoffLogger.Log($"ModOff Route Dispatcher: Calling route {route}");
+
             var (method, controller) = routeInfo;
             var parameters = method.GetParameters();
             var args = new object[parameters.Length];
@@ -40,6 +42,10 @@ namespace modoff.Runtime {
                         if (param.Name == preAction.Field)
                             value = preAction.Execute(value);
                     }
+
+                    if (param.ParameterType == typeof(Guid))
+                        args[i] = Guid.Parse(value.ToString());
+                    else
                     args[i] = Convert.ChangeType(value, param.ParameterType);
 
                 } else {

@@ -36,9 +36,6 @@ namespace modoff.Patch {
         static bool backgroundThd = false;
 
         static bool Prefix(WWWProcess __instance, string inURL, WWWForm inForm, UtWWWEventHandler inCallback, bool inSendProgressEvents) {
-            Debug.Log("ModOff: Glue: " + inURL.Split('/').Last());
-            ModoffLogger.Log("ModOff: Glue: " + inURL.Split('/').Last());
-
             System.Threading.Tasks.Task.Run(() => {
                 Dictionary<string, string> formData = ConvertByteArrayToDictionary(inForm.data);
                 ModoffLogger.Log(inURL);
@@ -47,7 +44,8 @@ namespace modoff.Patch {
                 UtAsyncEvent asyncEvent = UtAsyncEvent.COMPLETE;
                 try {
                     result = RuntimeStore.dispatcher.Dispatch(inURL, formData);
-                } catch (Exception) {
+                } catch (Exception ex) {
+                    Console.WriteLine(ex.ToString());
                     asyncEvent = UtAsyncEvent.ERROR;
                 }
 

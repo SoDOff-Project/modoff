@@ -44,6 +44,7 @@ namespace modoff.Runtime {
             var controllers = new List<Controller> {
                 new AuthenticationController(ctx),
                 new MembershipController(ctx),
+                new ProfileController(ctx, achievementService, profileService),
                 new RegistrationController(ctx, missionService, roomService, keyValueService)
             };
 

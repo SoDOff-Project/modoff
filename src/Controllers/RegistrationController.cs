@@ -48,7 +48,7 @@ namespace modoff.Controllers {
         [Route("v3/RegistrationWebService.asmx/RegisterParent")]
         [DecryptRequest("parentRegistrationData")]
         [EncryptResponse]
-        public IActionResult RegisterParent( string apiKey, string parentRegistrationData) {
+        public IActionResult RegisterParent(string apiKey, string parentRegistrationData) {
             ParentRegistrationData data = XmlUtil.DeserializeXml<ParentRegistrationData>(parentRegistrationData);
             User u = new User {
                 Id = Guid.NewGuid(),
@@ -97,7 +97,7 @@ namespace modoff.Controllers {
         [Route("V4/RegistrationWebService.asmx/RegisterChild")]
         [DecryptRequest("childRegistrationData")]
         [EncryptResponse]
-        public IActionResult RegisterChild(/*[FromForm]*/ Guid parentApiToken, string apiKey, string childRegistrationData) {
+        public IActionResult RegisterChild(Guid parentApiToken, string apiKey, string childRegistrationData) {
             User user = ctx.Sessions.FirstOrDefault(e => e.ApiToken == parentApiToken)?.User;
             if (user is null) {
                 return Ok(new RegistrationResult {

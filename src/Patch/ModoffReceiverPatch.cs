@@ -19,8 +19,8 @@ namespace modoff.Patch {
                     Debug.Log(res.injectedRes.pData);
                 else {
                     res.inCallback(res.asyncEvent, res.injectedRes);
-                    ModoffLogger.Log("SoDOff: CallbackDispatcher " + res.injectedRes.url + " -- callback: " + res.inCallback.Method.Name);
-                    Debug.Log("SoDOff: CallbackDispatcher " + res.injectedRes.url + " -- callback: " + res.inCallback.Method.Name);
+                    ModoffLogger.Log("ModOff CallbackDispatcher: " + res.injectedRes.url + " -- callback: " + res.inCallback.Method.Name);
+                    Debug.Log("ModOff Callback Dispatcher: " + res.injectedRes.url + " -- callback: " + res.inCallback.Method.Name);
                 }
             }
             return true;
