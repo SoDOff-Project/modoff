@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 namespace modoff.Schema {
     [XmlRoot(ElementName = "StoreData", Namespace = "")]
     [Serializable]
-    public class ModoffStoreData {
+    public class StoreData {
         [XmlElement(ElementName = "i")]
         public int Id;
 

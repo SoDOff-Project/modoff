@@ -10,7 +10,7 @@ public class StoreService {
     Dictionary<int, ItemsInStoreData> stores = new();
 
     public StoreService(ItemService itemService) {
-        ModoffStoreData[] storeArray = XmlUtil.DeserializeXml<ModoffStoreData[]>(XmlUtil.ReadResourceXmlString("store"));
+        modoff.Schema.StoreData[] storeArray = XmlUtil.DeserializeXml<modoff.Schema.StoreData[]>(XmlUtil.ReadResourceXmlString("store"));
         foreach (var s in storeArray) {
             ItemsInStoreData newStore = new() {
                 ID = s.Id % 1000, // % 1000 for support store variants (for example 30123 and 123 is the same store but for different games / versions)
