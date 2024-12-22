@@ -50,7 +50,7 @@ namespace modoff.Controllers {
         [Route("ProfileWebService.asmx/GetDetailedChildList")]
         public IActionResult GetDetailedChildList(Guid parentApiToken, string apiKey) {
             User user = ctx.Sessions.FirstOrDefault(x => x.ApiToken == parentApiToken)?.User;
-            if (user is null || user.Vikings.Count <= 0)
+            if (user is null || user.Vikings == null || user.Vikings.Count <= 0)
                 return Ok(""); // FIXME
 
             UserProfileData[] profiles = user.Vikings.Select(v => GetProfileDataFromViking(v, apiKey)).ToArray();

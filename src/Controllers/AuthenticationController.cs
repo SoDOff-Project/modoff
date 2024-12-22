@@ -61,9 +61,10 @@ namespace modoff.Controllers {
             ctx.SaveChanges();
 
             var childList = new List<UserLoginInfo>();
-            foreach (var viking in user.Vikings) {
-                childList.Add(new UserLoginInfo { UserName = viking.Name, UserID = viking.Uid.ToString() });
-            }
+            if (user.Vikings != null)
+                foreach (var viking in user.Vikings) {
+                    childList.Add(new UserLoginInfo { UserName = viking.Name, UserID = viking.Uid.ToString() });
+                }
 
             var response = new ParentLoginInfo {
                 UserName = user.Username,

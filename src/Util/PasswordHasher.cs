@@ -7,7 +7,7 @@ namespace modoff.Util {
     public static class PasswordHasher {
         private const int SaltSize = 16;
         private const int KeySize = 32;
-        private const int Iterations = 100_000;
+        private const int Iterations = 10_000;
 
         public static string HashPassword(string password) {
             using var rng = RandomNumberGenerator.Create();

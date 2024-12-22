@@ -38,7 +38,6 @@ namespace modoff.Patch {
         static bool Prefix(WWWProcess __instance, string inURL, WWWForm inForm, UtWWWEventHandler inCallback, bool inSendProgressEvents) {
             System.Threading.Tasks.Task.Run(() => {
                 Dictionary<string, string> formData = ConvertByteArrayToDictionary(inForm.data);
-                ModoffLogger.Log(inURL);
                 InjectedResponse inj = new InjectedResponse();
                 string result = "";
                 UtAsyncEvent asyncEvent = UtAsyncEvent.COMPLETE;
