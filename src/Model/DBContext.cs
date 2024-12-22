@@ -27,7 +27,7 @@ namespace modoff.Model {
         // we had a brief debate on whether it's neighborhoods or neighborheed
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            string DbPath = Path.Combine(Directory.GetCurrentDirectory(), "sodoff.db");
+            string DbPath = Path.Combine(Directory.GetCurrentDirectory(), "modoff.db");
             optionsBuilder.UseSqlite($"Data Source={DbPath}").UseLazyLoadingProxies();
         }
 
