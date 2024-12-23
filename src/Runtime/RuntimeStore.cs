@@ -29,10 +29,10 @@ namespace modoff.Runtime {
 
             itemService = new ItemService();
             achievementStoreSingleton = new AchievementStoreSingleton();
-            achievementService = new AchievementService(achievementStoreSingleton, inventoryService, ctx);
             displayNamesService = new DisplayNamesService(itemService);
             gameDataService = new GameDataService(ctx);
             inventoryService = new InventoryService(ctx, itemService);
+            achievementService = new AchievementService(achievementStoreSingleton, inventoryService, ctx);
             keyValueService = new KeyValueService(ctx);
             missionStoreSingleton = new MissionStoreSingleton();
             missionService = new MissionService(ctx, missionStoreSingleton, achievementService);
