@@ -10,7 +10,7 @@ using System.IO;
 namespace modoff.Services;
 public class MissionStoreSingleton {
 
-    private Dictionary<int, Mission> missions = new();
+    private Dictionary<int, ModoffMission> missions = new();
     private int[] activeMissions;
     private int[] upcomingMissions;
     private int[] activeMissionsV1;
@@ -46,7 +46,7 @@ public class MissionStoreSingleton {
         upcomingMissionsWoJS = defaultMissions.Upcoming;
     }
 
-    public Mission GetMission(int missionID) {
+    public ModoffMission GetMission(int missionID) {
         return DeepCopy(missions[missionID]);
     }
 
@@ -82,7 +82,7 @@ public class MissionStoreSingleton {
         return new int[0];
     }
 
-    private void SetUpRecursive(Mission mission) {
+    private void SetUpRecursive(ModoffMission mission) {
         missions.Add(mission.MissionID, mission);
         foreach (var innerMission in mission.Missions) {
             SetUpRecursive(innerMission);
@@ -90,7 +90,7 @@ public class MissionStoreSingleton {
     }
 
     // FIXME: Don't use BinaryFormatter for deep copying
-    public static Mission DeepCopy(Mission original) {
+    public static ModoffMission DeepCopy(ModoffMission original) {
         using (MemoryStream memoryStream = new MemoryStream()) {
             BinaryFormatter formatter = new BinaryFormatter();
 
@@ -98,7 +98,7 @@ public class MissionStoreSingleton {
 
             memoryStream.Position = 0;
 
-            Mission clone = (Mission)formatter.Deserialize(memoryStream);
+            ModoffMission clone = (ModoffMission)formatter.Deserialize(memoryStream);
 
             return clone;
         }

@@ -8,5 +8,5 @@ namespace modoff.Schema;
 public class ServerMissionArray {
 
     [XmlElement(ElementName = "Mission", IsNullable = true)]
-    public Mission[] MissionDataArray;
+    public ModoffMission[] MissionDataArray;
 }

@@ -880,7 +880,7 @@ namespace modoff.Controllers {
                 return Ok("error");
 
             uint gameVersion = ClientVersion.GetVersion(apiKey);
-            UserMissionStateResult result = new UserMissionStateResult { Missions = new List<Mission>() };
+            ModoffUserMissionStateResult result = new ModoffUserMissionStateResult { Missions = new List<ModoffMission>() };
             foreach (var mission in viking.MissionStates.Where(x => x.MissionStatus == MissionStatus.Upcoming))
                 result.Missions.Add(missionService.GetMissionWithProgress(mission.MissionId, viking.Id, gameVersion));
 
@@ -895,9 +895,9 @@ namespace modoff.Controllers {
                 return Ok("error");
 
             uint gameVersion = ClientVersion.GetVersion(apiKey);
-            UserMissionStateResult result = new UserMissionStateResult { Missions = new List<Mission>() };
+            ModoffUserMissionStateResult result = new ModoffUserMissionStateResult { Missions = new List<ModoffMission>() };
             foreach (var mission in viking.MissionStates.Where(x => x.MissionStatus == MissionStatus.Active)) {
-                Mission updatedMission = missionService.GetMissionWithProgress(mission.MissionId, viking.Id, gameVersion);
+                ModoffMission updatedMission = missionService.GetMissionWithProgress(mission.MissionId, viking.Id, gameVersion);
                 if (mission.UserAccepted != null)
                     updatedMission.Accepted = (bool)mission.UserAccepted;
                 result.Missions.Add(updatedMission);
@@ -914,7 +914,7 @@ namespace modoff.Controllers {
                 return Ok("error");
 
             uint gameVersion = ClientVersion.GetVersion(apiKey);
-            UserMissionStateResult result = new UserMissionStateResult { Missions = new List<Mission>() };
+            ModoffUserMissionStateResult result = new ModoffUserMissionStateResult { Missions = new List<ModoffMission>() };
             foreach (var mission in viking.MissionStates.Where(x => x.MissionStatus == MissionStatus.Completed))
                 result.Missions.Add(missionService.GetMissionWithProgress(mission.MissionId, viking.Id, gameVersion));
 
@@ -945,9 +945,9 @@ namespace modoff.Controllers {
                 return Ok("error");
 
             uint gameVersion = ClientVersion.GetVersion(apiKey);
-            UserMissionStateResult result = new UserMissionStateResult { Missions = new List<Mission>() };
+            ModoffUserMissionStateResult result = new ModoffUserMissionStateResult { Missions = new List<ModoffMission>() };
             foreach (var mission in viking.MissionStates.Where(x => x.MissionStatus != MissionStatus.Completed)) {
-                Mission updatedMission = missionService.GetMissionWithProgress(mission.MissionId, viking.Id, gameVersion);
+                ModoffMission updatedMission = missionService.GetMissionWithProgress(mission.MissionId, viking.Id, gameVersion);
 
                 if (mission.MissionStatus == MissionStatus.Upcoming) {
                     // NOTE: in old SoD job board mission must be send as non active and required accept
@@ -976,7 +976,7 @@ namespace modoff.Controllers {
                 return Ok("error");
 
             uint gameVersion = ClientVersion.GetVersion(apiKey);
-            UserMissionStateResult result = new UserMissionStateResult { Missions = new List<Mission>() };
+            ModoffUserMissionStateResult result = new ModoffUserMissionStateResult { Missions = new List<ModoffMission>() };
             if (filterV2.MissionPair.Count > 0) {
                 foreach (var m in filterV2.MissionPair)
                     if (m.MissionID != null)

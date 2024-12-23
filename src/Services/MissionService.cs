@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using modoff.Model;
+using modoff.Schema;
 using modoff.Util;
 
 namespace modoff.Services;
@@ -17,8 +18,8 @@ public class MissionService {
         this.achievementService = achievementService;
     }
 
-    public Mission GetMissionWithProgress(int missionId, int userId, uint gameVersion) {
-        Mission mission = null;
+    public ModoffMission GetMissionWithProgress(int missionId, int userId, uint gameVersion) {
+        ModoffMission mission = null;
 
         if (missionId == 999) { // TODO This is not a pretty solution with hard-coded values.
             if (gameVersion < 0xa2a03a0a) {
@@ -68,7 +69,7 @@ public class MissionService {
         // I do know that outer missions have inner missions as RuleItems, and if the RuleItem is supposed to be "complete" and it isn't, the quest breaks when the player quits the game and loads the quest again
         List<MissionCompletedResult> result = new();
         if (completed) {
-            Mission mission = GetMissionWithProgress(missionId, userId, gameVersion);
+            ModoffMission mission = GetMissionWithProgress(missionId, userId, gameVersion);
             if (MissionCompleted(mission)) {
                 // Update mission from active to completed
                 Viking viking = ctx.Vikings.FirstOrDefault(x => x.Id == userId)!;
@@ -105,7 +106,7 @@ public class MissionService {
         return result;
     }
 
-    private void UpdateMissionRecursive(Mission mission, int userId) {
+    private void UpdateMissionRecursive(ModoffMission mission, int userId) {
         List<modoff.Model.TaskStatus> taskStatuses = ctx.TaskStatuses.Where(e => e.VikingId == userId && e.MissionId == mission.MissionID).ToList();
 
         // Update mission rules and tasks
@@ -114,7 +115,7 @@ public class MissionService {
             RuleItem? rule = mission.MissionRule.Criteria.RuleItems.Find(x => x.ID == task.Id && x.Type == RuleItemType.Task);
             if (rule != null && task.Completed) rule.Complete = 1;
 
-            Task? t = mission.Tasks.Find(x => x.TaskID == task.Id);
+            ModoffTask? t = mission.Tasks.Find(x => x.TaskID == task.Id);
             if (t != null) {
                 if (task.Completed) t.Completed = 1;
                 t.Payload = task.Payload;
@@ -171,7 +172,7 @@ public class MissionService {
         ctx.SaveChanges();
     }
 
-    private bool MissionCompleted(Mission mission) {
+    private bool MissionCompleted(ModoffMission mission) {
         if (mission.MissionRule.Criteria.Type == "some")
             return mission.MissionRule.Criteria.RuleItems.Any(x => x.Complete == 1);
         else
