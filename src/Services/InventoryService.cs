@@ -76,9 +76,9 @@ namespace modoff.Services {
             return itemsWithInventoryId;
         }
 
-        public InventoryItemStatsMap AddBattleItemToInventory(Viking viking, int itemId, int itemTier, ItemStat[] itemStat = null) {
+        public ModoffInventoryItemStatsMap AddBattleItemToInventory(Viking viking, int itemId, int itemTier, ItemStat[] itemStat = null) {
             // get item data
-            ItemData itemData = itemService.GetItem(itemId);
+            ModoffItemData itemData = itemService.GetItem(itemId);
 
             // create new item
             InventoryItem item = new InventoryItem { ItemId = itemId, Quantity = 1 };
@@ -94,7 +94,7 @@ namespace modoff.Services {
             ctx.SaveChanges(); // We need to get the ID of the newly created item
 
             // return item with stats
-            return new InventoryItemStatsMap {
+            return new ModoffInventoryItemStatsMap {
                 CommonInventoryID = item.Id,
                 Item = itemData,
                 ItemStatsMap = itemStatsMap
@@ -108,7 +108,7 @@ namespace modoff.Services {
                 return;
 
             // get item data
-            ItemData? itemData = itemService.GetItem(item.ItemId);
+            ModoffItemData? itemData = itemService.GetItem(item.ItemId);
 
             // calculate shard price
             switch (itemData.ItemRarity) {
@@ -132,15 +132,15 @@ namespace modoff.Services {
             viking.InventoryItems.Remove(item);
         }
 
-        public CommonInventoryData GetCommonInventoryData(Viking viking) {
+        public ModoffCommonInventoryData GetCommonInventoryData(Viking viking) {
             List<InventoryItem> items = viking.InventoryItems.ToList();
 
-            List<UserItemData> userItemData = new();
+            List<ModoffUserItemData> userItemData = new();
             foreach (InventoryItem item in items) {
                 if (item.Quantity == 0) continue; // Don't include an item that the viking doesn't have
-                ItemData itemData = itemService.GetItem(item.ItemId);
+                ModoffItemData itemData = itemService.GetItem(item.ItemId);
                 if (itemData is null) continue; // Don't include items removed from item database
-                UserItemData uid = new UserItemData {
+                ModoffUserItemData uid = new ModoffUserItemData {
                     UserInventoryID = item.Id,
                     ItemID = itemData.ItemID,
                     Quantity = item.Quantity,
@@ -162,7 +162,7 @@ namespace modoff.Services {
                 userItemData.Add(uid);
             }
 
-            return new CommonInventoryData {
+            return new ModoffCommonInventoryData {
                 UserID = viking.Uid,
                 Item = userItemData.ToArray()
             };

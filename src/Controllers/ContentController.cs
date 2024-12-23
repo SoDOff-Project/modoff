@@ -246,10 +246,10 @@ namespace modoff.Controllers {
                 return Ok(inventoryService.GetCommonInventoryData(viking));
             } else {
                 // TODO: placeholder - return 8 viking slot items
-                return Ok(new CommonInventoryData {
+                return Ok(new ModoffCommonInventoryData {
                     UserID = user.Id,
-                    Item = new UserItemData[] {
-                    new UserItemData {
+                    Item = new ModoffUserItemData[] {
+                    new ModoffUserItemData {
                         UserInventoryID = 0,
                         ItemID = 7971,
                         Quantity = 8,
@@ -1061,7 +1061,7 @@ namespace modoff.Controllers {
             // get real item id (from box)
             Gender gender = XmlUtil.DeserializeXml<AvatarData>(viking.AvatarSerialized).GenderType;
             itemService.OpenBox(req.ItemID, gender, out int newItemId, out int quantity);
-            ItemData newItem = itemService.GetItem(newItemId);
+            ModoffItemData newItem = itemService.GetItem(newItemId);
             CommonInventoryResponseItem newInvItem;
 
             // check if it is gems or coins bundle
@@ -1085,7 +1085,7 @@ namespace modoff.Controllers {
             }
 
             // prepare list of possible rewards for response
-            List<ItemData> prizeItems = new List<ItemData>();
+            List<ModoffItemData> prizeItems = new List<ModoffItemData>();
             prizeItems.Add(newItem);
             foreach (var reward in itemService.GetItem(req.ItemID).Relationship.Where(e => e.Type == "Prize")) {
                 if (prizeItems.Count >= req.RedeemItemFetchCount)
@@ -1093,10 +1093,10 @@ namespace modoff.Controllers {
                 prizeItems.Add(itemService.GetItem(reward.ItemId));
             }
 
-            return Ok(new CommonInventoryResponse {
+            return Ok(new ModoffCommonInventoryResponse {
                 Success = true,
                 CommonInventoryIDs = new CommonInventoryResponseItem[] { newInvItem },
-                PrizeItems = new List<PrizeItemResponse>{ new PrizeItemResponse{
+                PrizeItems = new List<ModoffPrizeItemResponse>{ new ModoffPrizeItemResponse{
                 ItemID = req.ItemID,
                 PrizeItemID = newItem.ItemID,
                 MysteryPrizeItems = prizeItems,
@@ -1152,8 +1152,8 @@ namespace modoff.Controllers {
                 ctx.SaveChanges();
             }
 
-            UserItemPositionSetRequest[] createItems = XmlUtil.DeserializeXml<UserItemPositionSetRequest[]>(createXml);
-            UserItemPositionSetRequest[] updateItems = XmlUtil.DeserializeXml<UserItemPositionSetRequest[]>(updateXml);
+            ModoffUserItemPositionSetRequest[] createItems = XmlUtil.DeserializeXml<ModoffUserItemPositionSetRequest[]>(createXml);
+            ModoffUserItemPositionSetRequest[] updateItems = XmlUtil.DeserializeXml<ModoffUserItemPositionSetRequest[]>(updateXml);
             int[] deleteItems = XmlUtil.DeserializeXml<int[]>(removeXml);
 
             Tuple<int[], UserItemState[]> createData = roomService.CreateItems(createItems, room);
@@ -1323,7 +1323,7 @@ namespace modoff.Controllers {
         [Route("ContentWebService.asmx/PurchaseParty")] // used by World Of Jumpstart
         [VikingSession]
         public IActionResult PurchaseParty(Viking viking, int itemId, string apiKey) {
-            ItemData itemData = itemService.GetItem(itemId);
+            ModoffItemData itemData = itemService.GetItem(itemId);
 
             // create a party based on bought itemid
             Party party = new Party {
@@ -1540,7 +1540,7 @@ namespace modoff.Controllers {
                 return Ok(new RollUserItemResponse { Status = Status.ItemNotFound });
 
             // get item data and stats
-            ItemData itemData = itemService.GetItem(invItem.ItemId);
+            ModoffItemData itemData = itemService.GetItem(invItem.ItemId);
             ItemStatsMap itemStatsMap;
             if (invItem.StatsSerialized != null) {
                 itemStatsMap = XmlUtil.DeserializeXml<ItemStatsMap>(invItem.StatsSerialized);
@@ -1624,7 +1624,7 @@ namespace modoff.Controllers {
         public IActionResult FuseItems(Viking viking, string fuseItemsRequest) {
             FuseItemsRequest req = XmlUtil.DeserializeXml<FuseItemsRequest>(fuseItemsRequest);
 
-            ItemData blueprintItem;
+            ModoffItemData blueprintItem;
             try {
                 if (req.BluePrintInventoryID != null) {
                     blueprintItem = itemService.GetItem(
@@ -1661,7 +1661,7 @@ namespace modoff.Controllers {
             }
             // NOTE: we haven't saved any changes so far ... so we can safely interrupt "fusing" by return in loops above
 
-            var resItemList = new List<InventoryItemStatsMap>();
+            var resItemList = new List<ModoffInventoryItemStatsMap>();
             Gender gender = XmlUtil.DeserializeXml<AvatarData>(viking.AvatarSerialized).GenderType;
             foreach (BluePrintSpecification output in blueprintItem.BluePrint.Outputs) {
                 if (output.ItemID is null)
@@ -1680,7 +1680,7 @@ namespace modoff.Controllers {
             // NOTE: saved inside AddBattleItemToInventory
 
             // return response with new item info
-            return Ok(new FuseItemsResponse {
+            return Ok(new ModoffFuseItemsResponse {
                 Status = Status.Success,
                 InventoryItemStatsMaps = resItemList
             });
@@ -1724,7 +1724,7 @@ namespace modoff.Controllers {
         public IActionResult AddBattleItems(Viking viking, string request) {
             ModoffAddBattleItemsRequest req = XmlUtil.DeserializeXml<ModoffAddBattleItemsRequest>(request);
 
-            var resItemList = new List<InventoryItemStatsMap>();
+            var resItemList = new List<ModoffInventoryItemStatsMap>();
             foreach (ModoffBattleItemTierMap battleItemTierMap in req.BattleItemTierMaps) {
                 for (int i = 0; i < battleItemTierMap.Quantity; ++i) {
                     resItemList.Add(
@@ -1736,7 +1736,7 @@ namespace modoff.Controllers {
 
             // NOTE: saved inside AddBattleItemToInventory
 
-            return Ok(new AddBattleItemsResponse {
+            return Ok(new ModoffAddBattleItemsResponse {
                 Status = Status.Success,
                 InventoryItemStatsMaps = resItemList
             });
@@ -1814,7 +1814,7 @@ namespace modoff.Controllers {
             ApplyRewardsRequest req = XmlUtil.DeserializeXml<ApplyRewardsRequest>(request);
 
             List<AchievementReward> achievementRewards = new List<AchievementReward>();
-            UserItemStatsMap? rewardedBattleItem = null;
+            ModoffUserItemStatsMap? rewardedBattleItem = null;
             CommonInventoryResponse? rewardedStandardItem = null;
 
             int rewardMultipler = 0;
@@ -1868,8 +1868,8 @@ namespace modoff.Controllers {
                     };
                 } else {
                     // DT item
-                    InventoryItemStatsMap item = inventoryService.AddBattleItemToInventory(viking, rewardItem.ItemID, random.Next(1, 4));
-                    rewardedBattleItem = new UserItemStatsMap {
+                    ModoffInventoryItemStatsMap item = inventoryService.AddBattleItemToInventory(viking, rewardItem.ItemID, random.Next(1, 4));
+                    rewardedBattleItem = new ModoffUserItemStatsMap {
                         Item = item.Item,
                         ItemStats = item.ItemStatsMap.ItemStats,
                         ItemTier = item.ItemStatsMap.ItemTier,
@@ -1882,7 +1882,7 @@ namespace modoff.Controllers {
             // save
             ctx.SaveChanges();
 
-            return Ok(new ApplyRewardsResponse {
+            return Ok(new ModoffApplyRewardsResponse {
                 Status = Status.Success,
                 AchievementRewards = achievementRewards.ToArray(),
                 RewardedItemStatsMap = rewardedBattleItem,

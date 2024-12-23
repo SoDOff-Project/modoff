@@ -7,12 +7,12 @@ using modoff.Schema;
 namespace modoff.Services;
 
 public class StoreService {
-    Dictionary<int, ItemsInStoreData> stores = new();
+    Dictionary<int, ModoffItemsInStoreData> stores = new();
 
     public StoreService(ItemService itemService) {
         modoff.Schema.StoreData[] storeArray = XmlUtil.DeserializeXml<modoff.Schema.StoreData[]>(XmlUtil.ReadResourceXmlString("store"));
         foreach (var s in storeArray) {
-            ItemsInStoreData newStore = new() {
+            ModoffItemsInStoreData newStore = new() {
                 ID = s.Id % 1000, // % 1000 for support store variants (for example 30123 and 123 is the same store but for different games / versions)
                 StoreName = s.StoreName,
                 Description = s.Description,
@@ -33,11 +33,11 @@ public class StoreService {
         }
     }
 
-    public ItemsInStoreData GetStore(int id) {
+    public ModoffItemsInStoreData GetStore(int id) {
         return stores[id];
     }
 
-    public ItemsInStoreData GetStore(int id, uint gameVersion) {
+    public ModoffItemsInStoreData GetStore(int id, uint gameVersion) {
         if (gameVersion < ClientVersion.WoJS_NewAvatar) {
             if (stores.ContainsKey(id+30000))
                 return stores[id+30000];

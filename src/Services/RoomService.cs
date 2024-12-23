@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using modoff.Model;
 using modoff.Util;
+using modoff.Schema;
 
 namespace modoff.Services;
 public class RoomService {
@@ -23,7 +24,7 @@ public class RoomService {
         ctx.SaveChanges();
     }
 
-    public Tuple<int[], UserItemState[]> CreateItems(UserItemPositionSetRequest[] roomItemRequest, Room room) {
+    public Tuple<int[], UserItemState[]> CreateItems(ModoffUserItemPositionSetRequest[] roomItemRequest, Room room) {
         List<int> ids = new();
         List<UserItemState> states = new();
         foreach (var itemRequest in roomItemRequest) {
@@ -37,7 +38,7 @@ public class RoomService {
             }
 
             RoomItem roomItem = new RoomItem {
-                RoomItemData = XmlUtil.SerializeXml<UserItemPosition>(itemRequest).Replace(" xsi:type=\"UserItemPositionSetRequest\"", "") // NOTE: No way to avoid this hack when we're serializing a child class into a base class
+                RoomItemData = XmlUtil.SerializeXml<ModoffUserItemPosition>(itemRequest).Replace(" xsi:type=\"UserItemPositionSetRequest\"", "") // NOTE: No way to avoid this hack when we're serializing a child class into a base class
             };
 
             room.Items.Add(roomItem);
@@ -54,20 +55,20 @@ public class RoomService {
                 };
                 states.Add(userDefaultState);
                 itemRequest.UserItemState = userDefaultState;
-                roomItem.RoomItemData = XmlUtil.SerializeXml<UserItemPosition>(itemRequest).Replace(" xsi:type=\"UserItemPositionSetRequest\"", "");
+                roomItem.RoomItemData = XmlUtil.SerializeXml<ModoffUserItemPosition>(itemRequest).Replace(" xsi:type=\"UserItemPositionSetRequest\"", "");
                 ctx.SaveChanges();
             }
         }
         return new(ids.ToArray(), states.ToArray());
     }
 
-    public UserItemState[] UpdateItems(UserItemPositionSetRequest[] roomItemRequest, Room room) {
+    public UserItemState[] UpdateItems(ModoffUserItemPositionSetRequest[] roomItemRequest, Room room) {
         List<UserItemState> state = new();
         foreach (var itemRequest in roomItemRequest) {
             RoomItem? item = room.Items.FirstOrDefault(x => x.Id == itemRequest.UserItemPositionID);
             if (item is null) continue;
 
-            UserItemPosition itemPosition = XmlUtil.DeserializeXml<UserItemPosition>(item.RoomItemData);
+            ModoffUserItemPosition itemPosition = XmlUtil.DeserializeXml<ModoffUserItemPosition>(item.RoomItemData);
 
             if (itemRequest.Uses != null) itemPosition.Uses = itemRequest.Uses;
             itemPosition.InvLastModifiedDate = itemRequest.InvLastModifiedDate;
