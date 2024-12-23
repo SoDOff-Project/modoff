@@ -42,6 +42,7 @@ namespace modoff.Runtime {
             storeService = new StoreService(itemService);
 
             var controllers = new List<Controller> {
+                new AchievementController(ctx, achievementService),
                 new AuthenticationController(ctx),
                 new ContentController(ctx, keyValueService, itemService, missionService, roomService, achievementService, inventoryService, gameDataService, displayNamesService, neighborhoodService),
                 new MembershipController(ctx),
