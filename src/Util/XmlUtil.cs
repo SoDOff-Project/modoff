@@ -13,10 +13,6 @@ namespace modoff.Util {
                 return (T)serializer.Deserialize(reader);
         }
 
-        private class Utf8StringWriter : StringWriter {
-            public override Encoding Encoding => Encoding.UTF8;
-        }
-
         public static string SerializeXml<T>(T xmlObject) {
             var serializer = new XmlSerializer(typeof(T));
             using (var writer = new Utf8StringWriter()) {

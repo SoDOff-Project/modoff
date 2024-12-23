@@ -6,7 +6,7 @@ namespace modoff.Model {
         [Key]
         public Guid ApiToken { get; set; }
 
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
 
         public int? VikingId { get; set; }
 

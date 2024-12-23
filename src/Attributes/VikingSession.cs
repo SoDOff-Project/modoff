@@ -20,6 +20,7 @@ namespace modoff.Attributes {
             user = null;
             if (!request.ContainsKey(ApiToken))
                 return false;
+            string token = request[ApiToken];
             Session? session = RuntimeStore.ctx.Sessions.FirstOrDefault(x => x.ApiToken == Guid.Parse(request[ApiToken]));
 
             // get viking / user id from session

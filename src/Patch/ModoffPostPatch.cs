@@ -11,6 +11,7 @@ namespace modoff.Patch {
     [HarmonyPatch(typeof(UtWWWAsync), "Post")]
 
     public class SodoffPatch {
+        public static Mutex patchMutex = new Mutex();
         public static Dictionary<string, string> ConvertByteArrayToDictionary(byte[] data) {
             string strData = System.Text.Encoding.UTF8.GetString(data);
             Dictionary<string, string> dict = new Dictionary<string, string>();
@@ -42,10 +43,14 @@ namespace modoff.Patch {
                 string result = "";
                 UtAsyncEvent asyncEvent = UtAsyncEvent.COMPLETE;
                 try {
+                    patchMutex.WaitOne();
                     result = RuntimeStore.dispatcher.Dispatch(inURL, formData);
                 } catch (Exception ex) {
                     Console.WriteLine(ex.ToString());
                     asyncEvent = UtAsyncEvent.ERROR;
+                }
+                finally {
+                    patchMutex.ReleaseMutex();
                 }
 
                 inj.SetData(result);

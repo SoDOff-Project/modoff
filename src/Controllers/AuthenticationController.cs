@@ -130,8 +130,8 @@ namespace modoff.Controllers {
         }
 
         [Route("AuthenticationWebService.asmx/IsValidApiToken")] // used by World Of Jumpstart (FutureLand)
-        public IActionResult IsValidApiToken_V1(Guid? apiToken) {
-            if (apiToken is null)
+        public IActionResult IsValidApiToken_V1(Guid apiToken) {
+            if (apiToken == null)
                 return Ok(false);
             User? user = ctx.Sessions.FirstOrDefault(e => e.ApiToken == apiToken)?.User;
             Viking? viking = ctx.Sessions.FirstOrDefault(e => e.ApiToken == apiToken)?.Viking;
@@ -141,8 +141,8 @@ namespace modoff.Controllers {
         }
 
         [Route("AuthenticationWebService.asmx/IsValidApiToken_V2")]
-        public IActionResult IsValidApiToken(Guid? apiToken) {
-            if (apiToken is null)
+        public IActionResult IsValidApiToken(Guid apiToken) {
+            if (apiToken == null)
                 return Ok(ApiTokenStatus.TokenNotFound);
             User? user = ctx.Sessions.FirstOrDefault(e => e.ApiToken == apiToken)?.User;
             Viking? viking = ctx.Sessions.FirstOrDefault(e => e.ApiToken == apiToken)?.Viking;
@@ -152,6 +152,7 @@ namespace modoff.Controllers {
         }
 
         // This is more of a "create session for viking", rather than "login child"
+        [PlainText]
         [Route("AuthenticationWebService.asmx/LoginChild")]
         [DecryptRequest("childUserID")]
         [EncryptResponse]
