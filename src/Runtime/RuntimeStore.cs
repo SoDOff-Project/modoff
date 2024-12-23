@@ -45,6 +45,7 @@ namespace modoff.Runtime {
                 new AchievementController(ctx, achievementService),
                 new AuthenticationController(ctx),
                 new ContentController(ctx, keyValueService, itemService, missionService, roomService, achievementService, inventoryService, gameDataService, displayNamesService, neighborhoodService),
+                new ItemStoreController(ctx, storeService, itemService),
                 new MembershipController(ctx),
                 new ProfileController(ctx, achievementService, profileService),
                 new RegistrationController(ctx, missionService, roomService, keyValueService)
