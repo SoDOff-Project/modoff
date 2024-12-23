@@ -222,10 +222,12 @@ namespace modoff.Controllers {
         [Route("ContentWebService.asmx/GetKeyValuePair")]
         [Route("ContentWebService.asmx/GetKeyValuePairByUserID")]
         [VikingSession(Mode = VikingSession.Modes.VIKING_OR_USER, UseLock = false)]
-        public PairData? GetKeyValuePairByUserID(User? user, Viking? viking, int pairId, string? userId) {
+        public IActionResult GetKeyValuePairByUserID(User? user, Viking? viking, int pairId, string? userId) {
             Model.PairData? pair = keyValueService.GetPairData(user, viking, userId, pairId);
+            if (pair == null)
+                return OkNull<PairData>();
 
-            return keyValueService.ModelToSchema(pair);
+            return Ok(keyValueService.ModelToSchema(pair));
         }
 
         [Route("ContentWebService.asmx/SetKeyValuePair")]

@@ -28,7 +28,7 @@ namespace modoff.Runtime {
             string route = new Uri(url).AbsolutePath.TrimStart('/');
             if (!routes.TryGetValue(route, out var routeInfo)) {
                 ModoffLogger.Log($"Route \"{route}\" not found");
-                throw new Exception("Route not found");
+                throw new Exception($"Route not found {route}");
             }
 
             ModoffLogger.Log($"ModOff Route Dispatcher: Calling route {route}");
@@ -61,7 +61,7 @@ namespace modoff.Runtime {
                         args[i] = Convert.ChangeType(value, param.ParameterType);
                 } else {
                     ModoffLogger.Log($"Missing parameter: {param.Name}");
-                    throw new Exception($"Missing parameter: {param.Name}");
+                    args[i] = null;
                 }
             }
 
